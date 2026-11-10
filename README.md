@@ -14,7 +14,7 @@ A retry loop that waits a fixed 1 s hammers a service that is down; one that dou
 ## Before You Start
 
 ```bash
-go get webtyp.com/backoff@v0.1.0
+go get webtyp.com/backoff@v0.2.0
 ```
 
 ## Step-by-Step Guide
@@ -27,10 +27,11 @@ package main
 import (
 	"webtyp.com/backoff"
 	"webtyp.com/fmt"
+	"webtyp.com/time"
 )
 
 func main() {
-	policy, err := backoff.New(1000000000, 60000000000)
+	policy, err := backoff.New(time.Second, 60*time.Second)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -48,10 +49,11 @@ package main
 import (
 	"webtyp.com/backoff"
 	"webtyp.com/fmt"
+	"webtyp.com/time"
 )
 
 func main() {
-	policy, _ := backoff.New(1000000000, 60000000000)
+	policy, _ := backoff.New(time.Second, 60*time.Second)
 
 	d1, _ := policy.DelayAfter(1)
 	fmt.Println(d1) // 1000000000
@@ -78,13 +80,14 @@ package main
 import (
 	"webtyp.com/backoff"
 	"webtyp.com/fmt"
+	"webtyp.com/time"
 )
 
 func main() {
-	_, err1 := backoff.New(-1, 1000000000)
+	_, err1 := backoff.New(-1, time.Second)
 	fmt.Println(err1)
 
-	_, err2 := backoff.New(2000000000, 1000000000)
+	_, err2 := backoff.New(2*time.Second, time.Second)
 	fmt.Println(err2)
 
 	var empty backoff.Policy

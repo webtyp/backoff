@@ -3,7 +3,7 @@
 //
 // It never sleeps, never retries and never reads a clock; the caller does.
 //
-//	policy, err := backoff.New(1000000000, 60000000000) // 1 s first, 60 s longest
+//	policy, err := backoff.New(time.Second, 60*time.Second) // 1 s first, 60 s longest
 //	if err != nil { return err }
 //	wait, err := policy.DelayAfter(3) // 4 s: the delay after 3 failures
 //
@@ -21,7 +21,7 @@ func (e backoffError) Error() string { return string(e) }
 
 const (
 	// ErrFirstDelayNotPositive: New received a first delay of zero or less.
-	ErrFirstDelayNotPositive backoffError = "backoff: the first delay must be greater than zero, so no policy was created and nothing was waited or retried. Pass a first delay such as 1000000000 (one second) to backoff.New."
+	ErrFirstDelayNotPositive backoffError = "backoff: the first delay must be greater than zero, so no policy was created and nothing was waited or retried. Pass a first delay such as time.Second to backoff.New."
 
 	// ErrLongestBelowFirst: New received a longest delay smaller than the first.
 	ErrLongestBelowFirst backoffError = "backoff: the longest delay is smaller than the first delay, so no policy was created and nothing was waited or retried. Pass a longest delay equal to or greater than the first delay to backoff.New."
@@ -33,15 +33,15 @@ const (
 // Policy holds the first and the longest delay. Only New creates a valid one;
 // the zero Policy answers ErrPolicyNotCreated.
 type Policy struct {
-	first   time.Nano
-	longest time.Nano
+	first   time.Duration
+	longest time.Duration
 }
 
 // New creates a Policy. first must be greater than zero and longest must be at
 // least first.
 //
-// Example: policy, err := backoff.New(1000000000, 60000000000)
-func New(first, longest time.Nano) (Policy, error) {
+// Example: policy, err := backoff.New(time.Second, 60*time.Second)
+func New(first, longest time.Duration) (Policy, error) {
 	if first <= 0 {
 		return Policy{}, ErrFirstDelayNotPositive
 	}
@@ -56,7 +56,7 @@ func New(first, longest time.Nano) (Policy, error) {
 // then doubling after each further failure, never more than the longest delay.
 //
 // Example: wait, err := policy.DelayAfter(3) // first delay of 1 s → 4 s
-func (p Policy) DelayAfter(failures int64) (time.Nano, error) {
+func (p Policy) DelayAfter(failures int64) (time.Duration, error) {
 	if p.first <= 0 {
 		return 0, ErrPolicyNotCreated
 	}

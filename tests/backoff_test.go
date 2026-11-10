@@ -7,9 +7,9 @@ import (
 	"webtyp.com/time"
 )
 
-const second time.Nano = 1000000000
+const second = time.Second
 
-func newPolicy(t *testing.T, first, longest time.Nano) backoff.Policy {
+func newPolicy(t *testing.T, first, longest time.Duration) backoff.Policy {
 	t.Helper()
 	p, err := backoff.New(first, longest)
 	if err != nil {
@@ -18,7 +18,7 @@ func newPolicy(t *testing.T, first, longest time.Nano) backoff.Policy {
 	return p
 }
 
-func wantDelay(t *testing.T, p backoff.Policy, failures int64, want time.Nano) {
+func wantDelay(t *testing.T, p backoff.Policy, failures int64, want time.Duration) {
 	t.Helper()
 	got, err := p.DelayAfter(failures)
 	if err != nil {
