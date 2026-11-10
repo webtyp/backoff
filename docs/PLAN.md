@@ -3,6 +3,8 @@ PLAN: "feat: backoff — how long to wait before the next retry (delay doubles a
 TAG: v0.1.0
 EXECUTOR: jules
 REVIEWER: none
+STATUS: running
+SESSION: 7554120728413531919
 ---
 
 > Read AGENTS.md at the repo root before any change.
