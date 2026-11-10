@@ -3,8 +3,10 @@ PLAN: "feat: backoff — how long to wait before the next retry (delay doubles a
 TAG: v0.1.0
 EXECUTOR: jules
 REVIEWER: none
-STATUS: running
+STATUS: review
 SESSION: 7554120728413531919
+PR: https://github.com/webtyp/backoff/pull/1
+REVIEWED_COMMIT: d57aae0fcf084b296ef4143f665d420b6226d549
 ---
 
 > Read AGENTS.md at the repo root before any change.
